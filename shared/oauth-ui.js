@@ -4,10 +4,13 @@
 	if (window.__grindrOauthUi) return;
 
 	const COPIED_RESET_MS = 2500;
+	const PROVIDER_NAMES = { google: "Google", apple: "Apple" };
 
 	let cardEl = null;
 	let buttonEl = null;
+	let appleButtonEl = null;
 	let errorEl = null;
+	let activeProvider = "google";
 
 	const element = (tag, className, text) => {
 		const el = document.createElement(tag);
@@ -24,13 +27,23 @@
 
 		buttonEl = element("button", "grindr-oauth-button", "Loading...");
 		buttonEl.type = "button";
+		buttonEl.dataset.provider = "google";
 		buttonEl.disabled = true;
+
+		appleButtonEl = element(
+			"button",
+			"grindr-oauth-button grindr-oauth-button-apple",
+			"Sign in with Apple",
+		);
+		appleButtonEl.type = "button";
+		appleButtonEl.dataset.provider = "apple";
+		appleButtonEl.disabled = true;
 
 		errorEl = element("p", "grindr-oauth-error");
 		errorEl.setAttribute("role", "alert");
 		errorEl.hidden = true;
 
-		cardEl.append(buttonEl, errorEl);
+		cardEl.append(buttonEl, appleButtonEl, errorEl);
 		overlay.append(cardEl);
 		document.documentElement.append(overlay);
 	};
@@ -41,23 +54,35 @@
 		errorEl.hidden = !message;
 	};
 
-	const setPhase = (phase) => {
+	const buttonFor = (provider) =>
+		provider === "apple" ? appleButtonEl : buttonEl;
+
+	const setPhase = (phase, provider) => {
 		if (!buttonEl) return;
 		if (phase !== "failed") setError("");
-		if (phase === "loading") {
-			buttonEl.disabled = true;
-			buttonEl.textContent = "Loading...";
-		} else if (phase === "ready") {
-			buttonEl.disabled = false;
-			buttonEl.textContent = "Sign in with Google";
-			buttonEl.focus();
-		} else if (phase === "signing-in") {
-			buttonEl.disabled = true;
-			buttonEl.textContent = "Signing in with Google...";
-		} else if (phase === "failed") {
-			buttonEl.disabled = false;
-			buttonEl.textContent = "Try again";
+		if (phase === "signing-in" && provider) activeProvider = provider;
+		for (const id of Object.keys(PROVIDER_NAMES)) {
+			const button = buttonFor(id);
+			const name = PROVIDER_NAMES[id];
+			const active = id === activeProvider;
+			if (phase === "loading") {
+				button.disabled = true;
+				button.textContent =
+					id === "google" ? "Loading..." : `Sign in with ${name}`;
+			} else if (phase === "ready") {
+				button.disabled = false;
+				button.textContent = `Sign in with ${name}`;
+			} else if (phase === "signing-in") {
+				button.disabled = true;
+				if (active) button.textContent = `Signing in with ${name}...`;
+			} else if (phase === "failed") {
+				button.disabled = false;
+				button.textContent = active
+					? "Try again"
+					: `Sign in with ${name}`;
+			}
 		}
+		if (phase === "ready") buttonFor(activeProvider).focus();
 	};
 
 	const selectContents = (node) => {
@@ -80,6 +105,7 @@
 	const showTokenCard = (children) => {
 		if (!cardEl) mount();
 		buttonEl = null;
+		appleButtonEl = null;
 		errorEl = null;
 		cardEl.classList.add("grindr-oauth-token-card");
 		cardEl.replaceChildren(...children);
@@ -92,17 +118,33 @@
 		]);
 	};
 
-	const showToken = (token, { focus = false } = {}) => {
+	const TOKEN_COPY = {
+		google: {
+			title: "Your Google sign-in token",
+			copy: "Copy token",
+			copied: "Full token copied to your clipboard.",
+			expiry: "The token expires in about an hour.",
+		},
+		apple: {
+			title: "Your Apple sign-in code",
+			copy: "Copy code",
+			copied: "Full code copied to your clipboard.",
+			expiry: "The code works once and expires in 5 minutes, so use it right away.",
+		},
+	};
+
+	const showToken = (token, { focus = false, provider = "google" } = {}) => {
 		if (!token) {
 			showMissingToken();
 			return;
 		}
 
+		const text = TOKEN_COPY[provider] ?? TOKEN_COPY.google;
 		const field = element("p", "grindr-oauth-token", token);
 		const copyButton = element(
 			"button",
 			"grindr-oauth-token-copy",
-			"Copy token",
+			text.copy,
 		);
 		copyButton.type = "button";
 		const status = element("p", "grindr-oauth-token-status");
@@ -110,8 +152,8 @@
 		const note = element("p", "grindr-oauth-token-note");
 		note.append(
 			"Paste it into ",
-			element("strong", "", "Open Grind"),
-			". Don't share it publicly. The token expires in about an hour.",
+			element("strong", "", "Native Grind"),
+			`. Don't share it publicly. ${text.expiry}`,
 		);
 
 		let resetTimer = 0;
@@ -120,15 +162,15 @@
 			clearTimeout(resetTimer);
 			status.classList.remove("is-error");
 			copyButton.textContent = "Copied";
-			status.textContent = "Full token copied to your clipboard.";
+			status.textContent = text.copied;
 			resetTimer = setTimeout(() => {
-				copyButton.textContent = "Copy token";
+				copyButton.textContent = text.copy;
 			}, COPIED_RESET_MS);
 		};
 
 		const onCopyFailed = () => {
 			clearTimeout(resetTimer);
-			copyButton.textContent = "Copy token";
+			copyButton.textContent = text.copy;
 			status.classList.add("is-error");
 			status.textContent =
 				"Couldn't reach the clipboard. Tap the token, then copy it.";
@@ -148,11 +190,7 @@
 		});
 
 		showTokenCard([
-			element(
-				"h1",
-				"grindr-oauth-token-title",
-				"Your Google sign-in token",
-			),
+			element("h1", "grindr-oauth-token-title", text.title),
 			field,
 			copyButton,
 			status,

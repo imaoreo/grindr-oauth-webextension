@@ -4,6 +4,7 @@ const PART_SELECTORS = {
 	overlay: ".grindr-oauth-overlay",
 	card: ".grindr-oauth-card",
 	button: ".grindr-oauth-button",
+	appleButton: ".grindr-oauth-button-apple",
 	error: ".grindr-oauth-error",
 	title: ".grindr-oauth-token-title",
 	token: ".grindr-oauth-token",
@@ -44,6 +45,9 @@ export const pageUi = (window: Window) => {
 		},
 		get button() {
 			return button("button");
+		},
+		get appleButton() {
+			return button("appleButton");
 		},
 		get error() {
 			return element("error");

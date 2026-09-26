@@ -48,5 +48,5 @@ for target in "${selected[@]}"; do
 done
 
 if printf '%s\n' "${selected[@]}" | grep -qx firefox; then
-	bunx web-ext lint --source-dir "$out/firefox" || true
+	npx web-ext lint --source-dir "$out/firefox" || true
 fi

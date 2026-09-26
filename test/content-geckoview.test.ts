@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, test } from "vitest";
 
 import { NATIVE_APP, TEXT } from "./support/extension-contract";
 import { nativePayloads, tokenMessages } from "./support/fake-background";
@@ -43,8 +43,9 @@ describe("geckoview content", () => {
 	test("mounts on any web.grindr.com load without asking the background", async () => {
 		const { extension, tab } = await readySignIn(target);
 		expect(extension.messages).toEqual([]);
-		expect(tab.injected.slice(0, 2)).toEqual([
+		expect(tab.injected.slice(0, 3)).toEqual([
 			"shared/gis-core.js",
+			"shared/apple-core.js",
 			"shared/page-runner.js",
 		]);
 	});

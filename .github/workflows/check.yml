@@ -1,0 +1,53 @@
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Formatting
+        run: npm run check:format
+
+      - name: Shell scripts
+        run: shellcheck build.sh
+
+      - name: Tests
+        run: npm test
+
+      - name: Build
+        run: ./build.sh
+
+      # build.sh ignores web-ext lint failures so local builds still finish; CI should not.
+      - name: Lint Firefox package
+        run: npm run lint:firefox
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extensions
+          path: web-ext-artifacts/*.zip
+          if-no-files-found: error

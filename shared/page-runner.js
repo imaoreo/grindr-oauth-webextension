@@ -17,6 +17,7 @@
 	};
 
 	const gis = () => window.__grindrGis;
+	const apple = () => window.__grindrApple;
 
 	let prepared = false;
 	let loading = false;
@@ -41,18 +42,27 @@
 			);
 	};
 
-	const requestToken = async () => {
+	const signIn = async (provider) => {
+		if (provider === "apple") {
+			return { token: await apple().requestAuthorization(), provider };
+		}
+		return { token: await gis().requestAccessToken() };
+	};
+
+	const requestToken = async (provider = "google") => {
 		if (running) return;
-		if (!gis()) {
-			postResult({ error: "GIS core not loaded" });
+		if (!(provider === "apple" ? apple() : gis())) {
+			postResult({
+				error: `${provider === "apple" ? "Apple" : "GIS"} core not loaded`,
+			});
 			return;
 		}
 		running = true;
-		postResult({ phase: "signing-in" });
+		postResult({ phase: "signing-in", provider });
 		try {
-			const token = await gis().requestAccessToken();
+			const result = await signIn(provider);
 			running = false;
-			postResult({ token });
+			postResult(result);
 		} catch (error) {
 			running = false;
 			if (AWAITING_GESTURE.has(error?.code)) {
@@ -71,13 +81,15 @@
 		event.data?.channel === START_CHANNEL;
 
 	window.addEventListener("message", (event) => {
-		if (isStartMessage(event)) requestToken();
+		if (isStartMessage(event)) requestToken(event.data.provider);
 	});
 
 	const onButtonClick = (event) => {
 		if (running || !event.isTrusted) return;
-		if (!event.target?.closest?.(".grindr-oauth-button")) return;
-		if (prepared) requestToken();
+		const button = event.target?.closest?.(".grindr-oauth-button");
+		if (!button) return;
+		const provider = button.dataset?.provider || "google";
+		if (provider === "apple" || prepared) requestToken(provider);
 		else preload();
 	};
 	window.addEventListener("click", onButtonClick, true);

@@ -1,3 +1,1 @@
-import base from "@opengrind/config/prettier";
-
-export default base;
+export default { useTabs: true, objectWrap: "collapse" };

@@ -1,2 +1,15 @@
-extends:
-  - node_modules/@opengrind/config/lefthook.yml
+pre-commit:
+  parallel: true
+  commands:
+    # Chained, not two commands: both rewrite the same files.
+    js:
+      glob: "*.{js,mjs,ts}"
+      run: npx prettier --write {staged_files} && npx eslint --fix --no-warn-ignored {staged_files}
+      stage_fixed: true
+    text:
+      glob: "*.{json,md,yml,yaml,css,html}"
+      run: npx prettier --write {staged_files}
+      stage_fixed: true
+    shellcheck:
+      glob: "*.sh"
+      run: command -v shellcheck >/dev/null || { echo "shellcheck not installed, skipping"; exit 0; }; shellcheck {staged_files}

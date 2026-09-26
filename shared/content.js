@@ -6,7 +6,11 @@
 	const DELIVERY_FAILED = "Couldn't hand the token to the app.";
 	const EXTENSION_GONE =
 		"The extension was updated or turned off. Reload the page to sign in again.";
-	const PAGE_SCRIPTS = ["shared/gis-core.js", "shared/page-runner.js"];
+	const PAGE_SCRIPTS = [
+		"shared/gis-core.js",
+		"shared/apple-core.js",
+		"shared/page-runner.js",
+	];
 
 	const injectPageScript = (path) =>
 		new Promise((resolve, reject) => {
@@ -62,15 +66,16 @@
 		window.__grindrOauthUi.setError(message);
 	};
 
-	const handleToken = async (token) => {
+	const handleToken = async (result) => {
 		handled = true;
+		const { token, provider } = result;
 		if (!isGeckoViewBuiltIn()) {
-			window.__grindrOauthUi.showToken(token, { focus: true });
+			window.__grindrOauthUi.showToken(token, { focus: true, provider });
 			return;
 		}
 		let delivery;
 		try {
-			delivery = await sendMessage({ type: "token", token });
+			delivery = await sendMessage({ type: "token", ...result });
 		} catch (error) {
 			fail(
 				isExtensionAlive()
@@ -99,13 +104,13 @@
 
 	window.addEventListener("message", (event) => {
 		if (!mounted || !isResultMessage(event)) return;
-		const { phase, token, error } = event.data;
+		const { phase, provider, token, error } = event.data;
 		if (phase) {
-			window.__grindrOauthUi.setPhase(phase);
+			window.__grindrOauthUi.setPhase(phase, provider);
 			return;
 		}
 		if (handled) return;
-		if (token) handleToken(token);
+		if (token) handleToken({ token, provider });
 		else if (error) showError(error);
 	});
 

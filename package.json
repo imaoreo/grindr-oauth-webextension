@@ -1,23 +1,27 @@
 {
-	"name": "grindr-google-oauth-webextension",
+	"name": "grindr-oauth-webextension",
 	"private": true,
+	"author": "Jay Brammeld",
+	"license": "MIT",
 	"type": "module",
 	"scripts": {
 		"lint": "eslint .",
 		"format": "prettier --write .",
 		"check:format": "prettier --check .",
-		"sync-config": "opengrind-config sync",
-		"check:config": "opengrind-config check",
 		"lint:firefox": "web-ext lint --source-dir web-ext-artifacts/firefox",
-		"test": "bun test ./test"
+		"test": "vitest run"
 	},
 	"devDependencies": {
-		"@opengrind/config": "^1.3.0",
+		"@eslint/js": "^10.0.1",
 		"eslint": "^10.8.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-perfectionist": "^5.9.0",
+		"globals": "^17.6.0",
 		"happy-dom": "^20.14.5",
 		"lefthook": "^2.1.10",
 		"prettier": "^3.9.6",
 		"typescript-eslint": "^8.59.2",
+		"vitest": "^5.0.2",
 		"web-ext": "^10.6.0"
 	}
 }

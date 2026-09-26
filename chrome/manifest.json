@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Grindr Google OAuth",
-	"homepage_url": "https://git.opengrind.org/open-grind/grindr-google-oauth-webextension",
+	"homepage_url": "https://imaoreo.dev",
 	"version": "1.0.6",
 	"description": "Grindr Google OAuth token extractor for third-party Grindr clients",
 	"minimum_chrome_version": "102",
@@ -27,7 +27,11 @@
 	],
 	"web_accessible_resources": [
 		{
-			"resources": ["shared/gis-core.js", "shared/page-runner.js"],
+			"resources": [
+				"shared/gis-core.js",
+				"shared/apple-core.js",
+				"shared/page-runner.js"
+			],
 			"matches": ["https://web.grindr.com/*"]
 		}
 	]

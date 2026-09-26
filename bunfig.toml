@@ -1,2 +1,0 @@
-[install.scopes]
-"@opengrind" = { url = "https://git.opengrind.org/api/packages/open-grind/npm/" }

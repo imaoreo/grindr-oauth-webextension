@@ -1,12 +1,12 @@
 {
 	"manifest_version": 2,
 	"name": "Grindr Google OAuth",
-	"homepage_url": "https://git.opengrind.org/open-grind/grindr-google-oauth-webextension",
+	"homepage_url": "https://imaoreo.dev",
 	"version": "1.0.6",
 	"description": "Grindr Google OAuth token extractor for third-party Grindr clients",
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "grindr-google-oauth-webextension@opengrind.org",
+			"id": "grindr-google-oauth-webextension@imaoreo.dev",
 			"strict_min_version": "140.0",
 			"data_collection_permissions": {
 				"required": ["none"],
@@ -33,5 +33,9 @@
 			"run_at": "document_start"
 		}
 	],
-	"web_accessible_resources": ["shared/gis-core.js", "shared/page-runner.js"]
+	"web_accessible_resources": [
+		"shared/gis-core.js",
+		"shared/apple-core.js",
+		"shared/page-runner.js"
+	]
 }

@@ -88,9 +88,14 @@
 		await api.tabs.update(tab.id, { url: SIGN_IN_URL });
 	};
 
-	const handleToken = async (token) => {
+	const tokenPayload = ({ token, provider }) =>
+		provider === "apple"
+			? { type: "token", token, provider }
+			: { type: "token", token };
+
+	const handleToken = async (message) => {
 		if (!isGeckoViewBuiltIn()) return { delivered: false, error: REFUSED };
-		return sendToNativeApp({ type: "token", token });
+		return sendToNativeApp(tokenPayload(message));
 	};
 
 	const handleError = async (error) => {
@@ -133,7 +138,7 @@
 					{ armed: false },
 				);
 			case "token":
-				return respond(sendResponse, () => handleToken(message.token), {
+				return respond(sendResponse, () => handleToken(message), {
 					delivered: false,
 				});
 			case "error":

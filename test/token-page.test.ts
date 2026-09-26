@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, test } from "vitest";
 
 import { makeAccessToken } from "./support/access-tokens";
 import { TEXT } from "./support/extension-contract";

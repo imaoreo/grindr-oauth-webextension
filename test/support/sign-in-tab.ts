@@ -7,6 +7,7 @@ import {
 	TEXT,
 } from "./extension-contract";
 import { EXTENSION_ID, targetFiles } from "./extension-files";
+import { type AppleOutcome, installFakeApple } from "./fake-apple";
 import {
 	DEFAULT_TAB_ID,
 	type Extension,
@@ -32,6 +33,7 @@ export type ContextState =
 export type TabOptions = ClipboardOptions & {
 	tabId?: number;
 	gis?: GisOutcome[];
+	apple?: AppleOutcome[];
 	injectFails?: string;
 	gsiLoadFailures?: number;
 	context?: ContextState;
@@ -42,6 +44,7 @@ export type PageResult = {
 	channel: string;
 	phase?: string;
 	token?: string;
+	provider?: string;
 	error?: string;
 };
 
@@ -137,6 +140,14 @@ export const openTab = (extension: Extension, options: TabOptions = {}) => {
 	const pageErrors: string[] = [];
 	const context = createContentContext(options);
 	const gis = installFakeGis(window, { outcomes: options.gis ?? [] });
+	const apple = installFakeApple(window, { outcomes: options.apple ?? [] });
+	const openGisPopup = window.open.bind(window);
+	Object.assign(window, {
+		open: (url: string) =>
+			url.startsWith("https://appleid.apple.com/")
+				? apple.open(url)
+				: openGisPopup(url),
+	});
 	const clipboard = installClipboard(window, options);
 	let gsiLoadFailures = options.gsiLoadFailures ?? 0;
 	let windowStops = 0;
@@ -258,6 +269,7 @@ export const openTab = (extension: Extension, options: TabOptions = {}) => {
 		pageErrors,
 		context,
 		gis,
+		apple,
 		clipboard,
 		ui,
 		get windowStops() {

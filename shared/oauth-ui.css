@@ -139,3 +139,12 @@ html.grindr-oauth-active body {
 	color: #ffffff;
 	font-weight: 600;
 }
+
+.grindr-oauth-button-apple {
+	color: #000000;
+	background-color: #ffffff;
+}
+
+.grindr-oauth-button-apple:focus-visible {
+	outline-color: #ffffff;
+}

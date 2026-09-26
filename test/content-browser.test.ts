@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, test } from "vitest";
 
 import { SIGN_IN_URL, TEXT } from "./support/extension-contract";
 import { BROWSER_TARGETS, type Target } from "./support/extension-files";
@@ -67,7 +67,7 @@ const expectTokenView = ({ tab, token }: { tab: Tab; token: string }) => {
 	expect(ui.status.getAttribute("role")).toBe("status");
 	expect(ui.status.textContent).toBe("");
 	expect(ui.note.textContent).toBe(TEXT.note);
-	expect(ui.note.querySelector("strong")?.textContent).toBe("Open Grind");
+	expect(ui.note.querySelector("strong")?.textContent).toBe("Native Grind");
 	expect(ui.find("button")).toBeNull();
 	expect(ui.find("error")).toBeNull();
 	expect(ui.card.classList.contains("grindr-oauth-token-card")).toBe(true);
@@ -149,8 +149,9 @@ for (const target of BROWSER_TARGETS) {
 			await tab.whenReady();
 			expect(tab.ui.button.disabled).toBe(false);
 			expect(tab.ui.error.hidden).toBe(true);
-			expect(tab.injected.slice(0, 2)).toEqual([
+			expect(tab.injected.slice(0, 3)).toEqual([
 				"shared/gis-core.js",
+				"shared/apple-core.js",
 				"shared/page-runner.js",
 			]);
 		});

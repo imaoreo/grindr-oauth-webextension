@@ -5,7 +5,7 @@
 	"description": "Grindr Google OAuth token extractor for third-party Grindr clients",
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "grindr-google-oauth-webextension@opengrind.org",
+			"id": "grindr-google-oauth-webextension@imaoreo.dev",
 			"strict_min_version": "140.0"
 		},
 		"gecko_android": { "strict_min_version": "142.0" }
@@ -20,5 +20,9 @@
 			"run_at": "document_start"
 		}
 	],
-	"web_accessible_resources": ["shared/gis-core.js", "shared/page-runner.js"]
+	"web_accessible_resources": [
+		"shared/gis-core.js",
+		"shared/apple-core.js",
+		"shared/page-runner.js"
+	]
 }

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 
 import { makeAccessToken } from "./support/access-tokens";
 import { NATIVE_APP, SIGN_IN_URL, TEXT } from "./support/extension-contract";
@@ -337,5 +337,41 @@ describe("geckoview background, native delivery", () => {
 				sender: fromDefaultTab,
 			}).reply,
 		).toEqual({});
+	});
+});
+
+describe("geckoview background, Apple payloads", () => {
+	test("an Apple code keeps only its provider; a Google token stays bare", async () => {
+		const extension = createExtension({
+			target: "geckoview",
+			native: "accept",
+		});
+		const apple = extension.dispatch({
+			message: {
+				type: "token",
+				token: "c0001.code",
+				provider: "apple",
+				idToken: "dropped",
+			},
+			sender: fromDefaultTab,
+		});
+		expect(await apple.reply).toEqual({ delivered: true });
+		const token = makeAccessToken();
+		const google = extension.dispatch({
+			message: { type: "token", token, idToken: "dropped" },
+			sender: fromDefaultTab,
+		});
+		expect(await google.reply).toEqual({ delivered: true });
+		expect(nativePayloads(extension)).toEqual([
+			{
+				app: NATIVE_APP,
+				payload: {
+					type: "token",
+					token: "c0001.code",
+					provider: "apple",
+				},
+			},
+			{ app: NATIVE_APP, payload: { type: "token", token } },
+		]);
 	});
 });
