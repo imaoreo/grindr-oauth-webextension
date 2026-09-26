@@ -4,7 +4,7 @@ WebExtension that gets a Grindr sign-in token from Google or Apple for [Native G
 
 Based on the [Grindr Google OAuth WebExtension](https://git.opengrind.org/open-grind/grindr-google-oauth-webextension) by Open Grind, which this project forks and extends with Sign in with Apple.
 
-![Screenshot](./contrib/screenshot.avif)
+![The sign-in page with Google and Apple buttons, the Apple code page and the Google token page](./contrib/screenshot.avif)
 
 ## Install
 
