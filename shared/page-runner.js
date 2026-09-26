@@ -1,8 +1,8 @@
 (() => {
 	"use strict";
 
-	const RESULT_CHANNEL = "grindr-google-oauth:result";
-	const START_CHANNEL = "grindr-google-oauth:start";
+	const RESULT_CHANNEL = "grindr-oauth:result";
+	const START_CHANNEL = "grindr-oauth:start";
 	const AWAITING_GESTURE = new Set(["popup_failed_to_open", "popup_closed"]);
 
 	const postResult = (payload) => {

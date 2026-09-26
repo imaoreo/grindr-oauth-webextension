@@ -29,7 +29,7 @@ done
 mkdir -p "$out"
 for target in "${selected[@]}"; do
 	stage="$out/$target"
-	zip="grindr_google_oauth-$version-$target.zip"
+	zip="grindr_oauth-$version-$target.zip"
 	rm -rf "$stage" "${out:?}/$zip"
 	mkdir -p "$stage"
 	cp -R shared "$target/manifest.json" "$stage/"

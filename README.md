@@ -34,11 +34,11 @@ Build the extension with `./build.sh [firefox|chrome|geckoview]` (requires `zip`
 ```kotlin
 runtime.webExtensionController
     .ensureBuiltIn(
-        "resource://android/assets/grindr-google-oauth/",
-        "grindr-google-oauth-webextension@imaoreo.dev",
+        "resource://android/assets/grindr-oauth/",
+        "grindr-oauth-webextension@imaoreo.dev",
     )
     .accept { extension ->
-        extension?.setMessageDelegate(delegate, "grindr_google_oauth")
+        extension?.setMessageDelegate(delegate, "grindr_oauth")
         runtime.webExtensionController.setAllowedInPrivateBrowsing(extension!!, true)
     }
 ```

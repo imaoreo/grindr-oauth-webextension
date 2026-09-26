@@ -1,9 +1,9 @@
 {
 	"manifest_version": 3,
-	"name": "Grindr Google OAuth",
+	"name": "Grindr OAuth",
 	"homepage_url": "https://imaoreo.dev",
 	"version": "1.0.6",
-	"description": "Grindr Google OAuth token extractor for third-party Grindr clients",
+	"description": "Grindr Google and Apple sign-in token extractor for Native Grind",
 	"minimum_chrome_version": "102",
 	"icons": {
 		"16": "icons/icon-16.png",
@@ -15,7 +15,7 @@
 		"extension_pages": "script-src 'self'; object-src 'self'"
 	},
 	"permissions": ["storage"],
-	"action": { "default_title": "Sign in with Google" },
+	"action": { "default_title": "Sign in to Grindr" },
 	"background": { "service_worker": "shared/background.js" },
 	"content_scripts": [
 		{

@@ -10,7 +10,7 @@ export type ClipboardOptions = {
 	execCommand?: ExecCommandMode;
 };
 
-const USER_AGENT = "grindr-google-oauth-webextension-tests";
+const USER_AGENT = "grindr-oauth-webextension-tests";
 
 export const createPageWindow = (url: string) =>
 	new Window({

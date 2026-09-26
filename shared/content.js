@@ -2,7 +2,7 @@
 	"use strict";
 
 	const api = typeof browser !== "undefined" ? browser : chrome;
-	const RESULT_CHANNEL = "grindr-google-oauth:result";
+	const RESULT_CHANNEL = "grindr-oauth:result";
 	const DELIVERY_FAILED = "Couldn't hand the token to the app.";
 	const EXTENSION_GONE =
 		"The extension was updated or turned off. Reload the page to sign in again.";

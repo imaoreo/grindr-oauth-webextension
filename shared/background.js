@@ -3,7 +3,7 @@
 
 	const api = typeof browser !== "undefined" ? browser : chrome;
 	const SIGN_IN_URL = "https://web.grindr.com/";
-	const NATIVE_APP = "grindr_google_oauth";
+	const NATIVE_APP = "grindr_oauth";
 	const NATIVE_ACK_TIMEOUT_MS = 10000;
 	const NO_ANSWER = "The app didn't answer.";
 	const REFUSED = "The app didn't accept the token.";
@@ -69,7 +69,7 @@
 				resolve(verdict);
 			};
 			const refuse = (error) => {
-				console.error("[grindr-google-oauth] app refused", error);
+				console.error("[grindr-oauth] app refused", error);
 				settle({ delivered: false, error: REFUSED });
 			};
 			try {
@@ -99,7 +99,7 @@
 	};
 
 	const handleError = async (error) => {
-		console.error("[grindr-google-oauth]", error);
+		console.error("[grindr-oauth]", error);
 		if (isGeckoViewBuiltIn()) sendToNativeApp({ type: "error", error });
 		return {};
 	};
@@ -119,7 +119,7 @@
 		Promise.resolve()
 			.then(task)
 			.catch((error) => {
-				console.error("[grindr-google-oauth]", error);
+				console.error("[grindr-oauth]", error);
 				return fallback;
 			})
 			.then(sendResponse);

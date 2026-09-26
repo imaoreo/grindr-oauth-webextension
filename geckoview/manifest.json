@@ -1,11 +1,11 @@
 {
 	"manifest_version": 2,
-	"name": "Grindr Google OAuth",
+	"name": "Grindr OAuth",
 	"version": "1.0.6",
-	"description": "Grindr Google OAuth token extractor for third-party Grindr clients",
+	"description": "Grindr Google and Apple sign-in token extractor for Native Grind",
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "grindr-google-oauth-webextension@imaoreo.dev",
+			"id": "grindr-oauth-webextension@imaoreo.dev",
 			"strict_min_version": "140.0"
 		},
 		"gecko_android": { "strict_min_version": "142.0" }

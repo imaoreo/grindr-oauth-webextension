@@ -1,6 +1,6 @@
 export const SIGN_IN_URL = "https://web.grindr.com/";
-export const NATIVE_APP = "grindr_google_oauth";
-export const RESULT_CHANNEL = "grindr-google-oauth:result";
+export const NATIVE_APP = "grindr_oauth";
+export const RESULT_CHANNEL = "grindr-oauth:result";
 export const GIS_CLIENT_URL = "https://accounts.google.com/gsi/client";
 
 export const TEXT = {
