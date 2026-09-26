@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Grindr OAuth",
-	"homepage_url": "https://imaoreo.dev",
+	"homepage_url": "https://github.com/imaoreo/grindr-oauth-webextension",
 	"version": "1.0.6",
 	"description": "Grindr Google and Apple sign-in token extractor for Native Grind",
 	"minimum_chrome_version": "102",
